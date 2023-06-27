@@ -36,6 +36,10 @@ protected:
 
 	void Move(const FInputActionValue& Value);
 
+	// TODO: OLD INPUT SYSTEM (Remove Later)
+	void Turn(float Value);
+	void LookUp(float Value);
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	UCapsuleComponent* Capsule;

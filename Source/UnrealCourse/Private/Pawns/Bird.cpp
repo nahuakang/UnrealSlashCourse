@@ -61,6 +61,18 @@ void ABird::Move(const FInputActionValue& Value)
 	}
 }
 
+// TODO: OLD INPUT SYSTEM (Remove Later)
+void ABird::Turn(float Value)
+{
+	AddControllerYawInput(Value);
+}
+
+// TODO: OLD INPUT SYSTEM (Remove Later)
+void ABird::LookUp(float Value)
+{
+	AddControllerPitchInput(Value);
+}
+
 void ABird::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -69,6 +81,10 @@ void ABird::Tick(float DeltaTime)
 void ABird::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	// TODO: OLD INPUT SYSTEM (Remove Later)
+	PlayerInputComponent->BindAxis(FName("Turn"), this, &ABird::Turn);
+	PlayerInputComponent->BindAxis(FName("LookUp"), this, &ABird::LookUp);
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(
 		PlayerInputComponent))
