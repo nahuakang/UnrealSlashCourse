@@ -8,10 +8,12 @@
 #include "Bird.generated.h" // Needs to be included last
 
 // Forward Declarations
+class UCameraComponent;
 class UCapsuleComponent;
 class UInputAction;
 class UInputMappingContext;
 class USkeletalMeshComponent;
+class USpringArmComponent;
 
 UCLASS()
 class UNREALCOURSE_API ABird : public APawn
@@ -40,4 +42,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	USkeletalMeshComponent* BirdMesh;
+
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* CameraBoom;
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* ViewCamera;
 };
