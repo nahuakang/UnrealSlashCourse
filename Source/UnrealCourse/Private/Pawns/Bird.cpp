@@ -52,7 +52,7 @@ void ABird::BeginPlay()
 void ABird::Move(const FInputActionValue& Value)
 {
 	const float DirectionValue = Value.Get<float>();
-	if (Controller && (DirectionValue != 0.f))
+	if (GetController() && (DirectionValue != 0.f))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Moving forward"));
 		FVector Forward = GetActorForwardVector();
@@ -61,16 +61,14 @@ void ABird::Move(const FInputActionValue& Value)
 	}
 }
 
-// TODO: OLD INPUT SYSTEM (Remove Later)
-void ABird::Turn(float Value)
+void ABird::Look(const FInputActionValue& Value)
 {
-	AddControllerYawInput(Value);
-}
-
-// TODO: OLD INPUT SYSTEM (Remove Later)
-void ABird::LookUp(float Value)
-{
-	AddControllerPitchInput(Value);
+	const FVector2d LookAxisValue = Value.Get<FVector2d>();
+	if (GetController())
+	{
+		AddControllerYawInput(LookAxisValue.X);
+		AddControllerPitchInput(LookAxisValue.Y);
+	}
 }
 
 void ABird::Tick(float DeltaTime)
@@ -82,14 +80,13 @@ void ABird::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// TODO: OLD INPUT SYSTEM (Remove Later)
-	PlayerInputComponent->BindAxis(FName("Turn"), this, &ABird::Turn);
-	PlayerInputComponent->BindAxis(FName("LookUp"), this, &ABird::LookUp);
-
+	// Enhanced Input System
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(
 		PlayerInputComponent))
 	{
 		EnhancedInputComponent->
 			BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABird::Move);
+		EnhancedInputComponent->
+			BindAction(LookAction, ETriggerEvent::Triggered, this, &ABird::Look);
 	}
 }
