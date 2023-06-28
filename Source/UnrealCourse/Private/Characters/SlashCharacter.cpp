@@ -7,6 +7,7 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -18,6 +19,14 @@ ASlashCharacter::ASlashCharacter()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
+	// In Blueprint, use "Orient Rotation to Movement" to rotate the character to face the
+	// moving direction on the Character Movement (CharMoveComp) movement vector
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	// In Blueprint, use "Rotation Rate" to change how fast the rotation happens
+	// We only change the Yaw value since we only care about rotation speed over Yaw
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 720.f, 0.f);
+
+	// In Blueprint, "Use Pawn Control Rotation" to only move with controller view
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(GetRootComponent());
 	CameraBoom->TargetArmLength = 300.f;
@@ -47,18 +56,31 @@ void ASlashCharacter::Move(const FInputActionValue& Value)
 	// In IMC_Slash, W/S is on Y-axis (forward/backward), A/D is on X-axis (left/right)
 	// GetActorForwardVector returns the forward direction of the root component (capsule)
 	// We want to look in the direction that we're looking at (controller's rotation)
-	const FVector Forward = GetActorForwardVector();
-	AddMovementInput(Forward, MovementVector.Y);
-	const FVector Right = GetActorRightVector();
-	AddMovementInput(Right, MovementVector.X);
+	// const FVector Forward = GetActorForwardVector();
+	// AddMovementInput(Forward, MovementVector.Y);
+	// const FVector Right = GetActorRightVector();
+	// AddMovementInput(Right, MovementVector.X);
 
-	// TODO: Use the following in the future
-	// const FRotator = Controller->GetControlRotation();
-	// const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
-	// const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxes(EAxis::X);
-	// AddMovementInput(ForwardDirection, MovementVector.Y);
-	// const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxes(EAxis::Y);
-	// AddMovementInput(RightDirection, MovementVector.X);
+	// More complex movement using Controller's rotation
+	const FRotator Rotation = Controller->GetControlRotation();
+	// In UE FRotator, the sequence is (InPitch, InYaw, InRoll)
+	// We only care about the Yaw (only which horizontal direction) and
+	// we don't care about the Pitch (looking from above or below)
+	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+
+	// Get a forward vector corresponding to the controller's looking direction
+	// FRotationMatrix(YawRotation) creates a brand new rotation matrix
+	// FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) returns a matrix corresponding
+	// to the Yaw rotation, basically a "forward-pointing" direction the controller is looking at
+	// Note EAxis::X generally refers to the forward direction
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	// MovementVector.Y corresponds to forward/backward
+	AddMovementInput(ForwardDirection, MovementVector.Y);
+
+	// Get a right vector corresponding to the controller
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	// MovementVector.X corresponds to left/right
+	AddMovementInput(RightDirection, MovementVector.X);
 }
 
 void ASlashCharacter::Look(const FInputActionValue& Value)
