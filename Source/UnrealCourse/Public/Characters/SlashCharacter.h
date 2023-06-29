@@ -9,6 +9,7 @@
 
 // Forward Declarations
 class UCameraComponent;
+class UGroomComponent;
 class UInputAction;
 class UInputMappingContext;
 class USpringArmComponent;
@@ -44,4 +45,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* ViewCamera;
+
+	UPROPERTY(VisibleAnywhere, Category = Hair)
+	UGroomComponent* Hair;
+
+	UPROPERTY(VisibleAnywhere, Category = Hair)
+	UGroomComponent* Eyebrows;
 };
