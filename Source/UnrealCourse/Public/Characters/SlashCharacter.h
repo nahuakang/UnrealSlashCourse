@@ -8,6 +8,7 @@
 #include "SlashCharacter.generated.h"
 
 // Forward Declarations
+class AItem;
 class UCameraComponent;
 class UGroomComponent;
 class UInputAction;
@@ -40,8 +41,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* JumpAction;
 
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* EKeyAction;
+
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void EKeyPressed();
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -55,4 +60,12 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Hair)
 	UGroomComponent* Eyebrows;
+
+	// Not visible in Details panel, just during runtime
+	UPROPERTY(VisibleInstanceOnly)
+	AItem* OverlappingItem;
+
+public:
+	// Use FORCEINLINE to make setters/getters inline for small optimizations
+	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
 };

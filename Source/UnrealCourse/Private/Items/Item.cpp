@@ -3,6 +3,7 @@
 
 #include "Items/Item.h"
 #include "Components/SphereComponent.h"
+#include "Characters/SlashCharacter.h"
 #include "UnrealCourse/DebugMacros.h"
 
 // Sets default values
@@ -40,20 +41,32 @@ void AItem::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
                             UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                             const FHitResult& SweepResult)
 {
-	const FString OtherActorName = FString("Begin Overlap with: ") + OtherActor->GetName();
-	if (GEngine)
+	// const FString OtherActorName = FString("Begin Overlap with: ") + OtherActor->GetName();
+	// if (GEngine)
+	// {
+	// 	GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Red, OtherActorName);
+	// }
+
+	ASlashCharacter* SlashCharacter = Cast<ASlashCharacter>(OtherActor);
+	if (SlashCharacter)
 	{
-		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Red, OtherActorName);
+		SlashCharacter->SetOverlappingItem(this);
 	}
 }
 
 void AItem::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	const FString OtherActorName = FString("End Overlap with: ") + OtherActor->GetName();
-	if (GEngine)
+	// const FString OtherActorName = FString("End Overlap with: ") + OtherActor->GetName();
+	// if (GEngine)
+	// {
+	// 	GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Red, OtherActorName);
+	// }
+
+	ASlashCharacter* SlashCharacter = Cast<ASlashCharacter>(OtherActor);
+	if (SlashCharacter)
 	{
-		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Red, OtherActorName);
+		SlashCharacter->SetOverlappingItem(nullptr);
 	}
 }
 

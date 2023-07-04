@@ -14,6 +14,9 @@ class UNREALCOURSE_API AWeapon : public AItem
 {
 	GENERATED_BODY()
 
+public:
+	void Equip(USceneComponent* InParent, FName InSocketName);
+
 protected:
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	                             UPrimitiveComponent* OtherComp,
