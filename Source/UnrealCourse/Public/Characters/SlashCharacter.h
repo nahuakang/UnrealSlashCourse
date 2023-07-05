@@ -10,6 +10,7 @@
 
 // Forward Declarations
 class AItem;
+class UAnimMontage;
 class UCameraComponent;
 class UGroomComponent;
 class UInputAction;
@@ -45,9 +46,13 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* EKeyAction;
 
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* AttackAction;
+
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void EKeyPressed();
+	void Attack();
 
 private:
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
@@ -67,6 +72,12 @@ private:
 	// Not visible in Details panel, just during runtime
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* OverlappingItem;
+
+	/**
+	 * Animation Montages
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* AttackMontage;
 
 public:
 	// Use FORCEINLINE to make setters/getters inline for small optimizations
