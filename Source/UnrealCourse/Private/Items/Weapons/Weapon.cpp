@@ -6,9 +6,14 @@
 
 void AWeapon::Equip(USceneComponent* InParent, FName InSocketName)
 {
+	AttachMeshToSocket(InParent, InSocketName);
+	ItemState = EItemState::EIS_Equipped;
+}
+
+void AWeapon::AttachMeshToSocket(USceneComponent* InParent, FName InSocketName)
+{
 	const FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
 	ItemMesh->AttachToComponent(InParent, TransformRules, InSocketName);
-	ItemState = EItemState::EIS_Equipped;
 }
 
 void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
