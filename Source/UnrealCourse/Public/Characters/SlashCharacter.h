@@ -10,6 +10,7 @@
 
 // Forward Declarations
 class AItem;
+class AWeapon;
 class UAnimMontage;
 class UCameraComponent;
 class UGroomComponent;
@@ -49,6 +50,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* AttackAction;
 
+	UPROPERTY(VisibleAnywhere, Category = Weapon)
+	AWeapon* EquippedWeapon;
+
 	/**
 	 * Enhanced Input System Callbacks
 	 */
@@ -64,8 +68,11 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void AttackEnd();
-
 	bool CanAttack();
+
+	void PlayEquipMontage(FName SectionName);
+	bool CanDisarm();
+	bool CanArm();
 
 private:
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
@@ -94,6 +101,9 @@ private:
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* AttackMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* EquipMontage;
 
 public:
 	// Use FORCEINLINE to make setters/getters inline for small optimizations
