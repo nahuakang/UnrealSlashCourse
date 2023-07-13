@@ -56,6 +56,7 @@ protected:
 	/**
 	 * Enhanced Input System Callbacks
 	 */
+
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void EKeyPressed();
@@ -64,6 +65,7 @@ protected:
 	/**
 	 * Animation Montage Functions
 	 */
+
 	void PlayAttackMontage();
 
 	UFUNCTION(BlueprintCallable)
@@ -84,6 +86,10 @@ protected:
 	void FinishEquipping();
 
 private:
+	/**
+	 * Character and Action States
+	 */
+
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
 
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -108,6 +114,7 @@ private:
 	/**
 	 * Animation Montages
 	 */
+
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* AttackMontage;
 
@@ -115,7 +122,10 @@ private:
 	UAnimMontage* EquipMontage;
 
 public:
-	// Use FORCEINLINE to make setters/getters inline for small optimizations
+	/**
+	 * Setters and Getters
+	 */
+
 	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
 	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState; }
 };
